@@ -22,7 +22,11 @@
 
             set
             {
-                if (value.Length == 6)
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Inga rutor ska vara tomma.");
+                }
+                else if (value.Length == 6)
                 {
                     for (int i = 0; i < 3; i++)
                     {
