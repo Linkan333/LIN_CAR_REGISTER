@@ -33,7 +33,14 @@
                 <RadioButton x:Name="radioTruck" Content="Lastbil" CheckedChanged="OnRadioCheckedChanged" />
             </HorizontalStackLayout>
 
-            <ListView x:Name="listViewVehicles" Margin="0,0,0,20"/>
+            <ListView x:Name="listViewVehicles" Margin="0,0,0,20">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Description}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="20">
                 <Entry x:Name="entrySearchRegistrationNumber" HorizontalOptions="FillAndExpand" Placeholder="Sök på registreringsnummer"></Entry>

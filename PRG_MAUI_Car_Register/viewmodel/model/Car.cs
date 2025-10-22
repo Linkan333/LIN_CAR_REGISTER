@@ -2,7 +2,7 @@
 {
     public class Car : Vehicle
     {
-        public int NumberOfDoors { get; set; }
-        public override string ToString() => base.ToString() + $"\tDörrar: {NumberOfDoors}";
+        public override string GetDescription() =>
+            $"Bil: {Manufacturer} {Model}, {YearModel}. Registreringsnummer: {RegistrationNumber}.";
     }
 }

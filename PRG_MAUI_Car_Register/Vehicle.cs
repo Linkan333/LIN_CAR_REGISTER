@@ -3,16 +3,13 @@ using System.Text.RegularExpressions;
 
 namespace PRG_MAUI_Car_Register.Models
 {
-    public partial class Vehicle
+    abstract public partial class Vehicle
     {
         private string registrationNumber = string.Empty;
         private string manufacturer = string.Empty;
         private string model = string.Empty;
         private string yearModel = string.Empty;
 
-        public Vehicle()
-        {
-        }
 
         public string RegistrationNumber
         {
@@ -103,5 +100,8 @@ namespace PRG_MAUI_Car_Register.Models
         {
             return $"{registrationNumber}\t{manufacturer}\t{model}\t{yearModel}";
         }
+
+        public abstract string GetDescription();
+        public string Description => GetDescription();
     }
 }

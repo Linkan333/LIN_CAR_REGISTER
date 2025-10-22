@@ -2,7 +2,7 @@
 {
     public class Motorcycle : Vehicle
     {
-        public bool HasSidecar { get; set; }
-        public override string ToString() => base.ToString() + $"\tSidovagn: {(HasSidecar ? "Ja" : "Nej")}";
+        public override string GetDescription() =>
+            $"Motorcykel: {Manufacturer} {Model}, {YearModel}. Registreringsnummer: {RegistrationNumber}.";
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Truck : Vehicle
     {
-        public double MaxLoadKg { get; set; }
-        public override string ToString() => base.ToString() + $"\tMaxlast (kg): {MaxLoadKg}";
+        public override string GetDescription() =>
+            $"Lastbil: {Manufacturer} {Model}, {YearModel}. Registreringsnummer: {RegistrationNumber}.";
     }
 }
