@@ -19,32 +19,25 @@ namespace PRG_MAUI_Car_Register
         {
             try
             {
-                Vehicle vehicle = pickerType.SelectedIndex switch
-                {
-                    0 => new Car(),
-                    1 => new Motorcycle(),
-                    2 => new Truck(),
-                    _ => throw new ArgumentException("Välj en giltig fordonstyp.")
-                };
+                Vehicle vehicle;
+
+                string selectedType = pickerType.SelectedItem?.ToString();
+                if (string.IsNullOrEmpty(selectedType))
+                    throw new ArgumentException("Du måste välja en fordons typ.");
+                if (selectedType == "Bil")
+                    vehicle = new Car();
+                else if (selectedType == "MC")
+                    vehicle = new Motorcycle();
+                else if (selectedType == "Lastbil")
+                    vehicle = new Truck();
+                else
+                    throw new ArgumentException("Välj ett giltigt fordons typ.");
 
                 vehicle.RegistrationNumber = entryRegistrationNumber.Text;
                 vehicle.Manufacturer = entryManufacturer.Text;
                 vehicle.Model = entryModel.Text;
                 vehicle.YearModel = entryYearModel.Text;
 
-                // Om du har unika fält kan du läsa in dem baserat på typ, t.ex.:
-                if (vehicle is Car car)
-                {
-                    // car.NumberOfDoors = ... // hämta från UI
-                }
-                else if (vehicle is Motorcycle mc)
-                {
-                    // mc.HasSidecar = ...
-                }
-                else if (vehicle is Truck tr)
-                {
-                    // tr.MaxLoadKg = ...
-                }
 
                 vehicleList.Add(vehicle);
 
@@ -75,7 +68,8 @@ namespace PRG_MAUI_Car_Register
                         ? vehicleList.Where(v => v is Truck)
                         : vehicleList;
 
-            listViewVehicles.ItemsSource = vehicleList;
+            listViewVehicles.ItemsSource = filtered.ToList();
+
         }
 
         private void OnSearchClicked(object sender, EventArgs e)
