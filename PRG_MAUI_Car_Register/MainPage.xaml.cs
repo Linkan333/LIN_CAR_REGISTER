@@ -12,7 +12,7 @@
 
         private void OnRegisterClicked(object sender, EventArgs e)
         {
-            try
+            try 
             {
                 Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
 
@@ -20,6 +20,7 @@
                 vehicle.RegistrationNumber = regNr;
                 vehicle.Manufacturer = entryManufacturer.Text;
                 vehicle.Model = entryModel.Text;
+                vehicle.YearModel = entryYearModel.Text;
 
                 vehicleList.Add(vehicle);
                 listViewVehicles.ItemsSource = null;

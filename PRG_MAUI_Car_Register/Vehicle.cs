@@ -1,4 +1,7 @@
-﻿namespace PRG_MAUI_Car_Register
+﻿
+using System.Text.RegularExpressions;
+
+namespace PRG_MAUI_Car_Register
 {
     class Vehicle
     {
@@ -8,6 +11,7 @@
         private string registrationNumber = string.Empty;
         private string manufacturer = string.Empty;
         private string model = string.Empty;
+        private string yearModel = string.Empty;
 
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
@@ -24,7 +28,7 @@
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentException("Inga rutor ska vara tomma.");
+                    throw new ArgumentException("Du måste fylla i registrerings numret.");
                 }
                 else if (value.Length == 6)
                 {
@@ -68,17 +72,61 @@
         public string Model
         {
             get { return model; }
-            set { this.model = value; }
+            set {
+
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Du måste fylla i Modell");
+                } else { 
+                    this.model = value;
+                }
+            }
         }
 
         //TODO Modell ska valideras, sparas i objektet och visas i UI
         public string Manufacturer
         {
             get { return manufacturer; }
-            set { this.manufacturer = value; }
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new ArgumentException("du måste fylla i tillverkaren");
+                } else
+                {
+
+                    this.manufacturer = value;
+                }
+            }
         }
 
         //TODO Att spara årsmodell ska möjliggöras, ska valideras, sparas i objektet och visas i UI
+
+        public string YearModel
+        {
+            get { return yearModel; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Du måste fylla i årsmodell.");
+                }
+
+                if (!Regex.IsMatch(value, @"^(18[8-9]\d|19\d{2}|20\d{2}|21\d{2}|22\d{2}|23\d{2}|24\d{2}|25\d{2})$"))
+                {
+                    throw new ArgumentException("Årsmodellen måste vara ett giltigt årtal i formatet YYYY.");
+                }
+
+                int parsedYear = int.Parse(value);
+                int currentYear = DateTime.Now.Year;
+
+                if (parsedYear < 1886 || parsedYear > currentYear)
+                {
+                    throw new ArgumentException($"Årsmodellen måste vara mellan 1886 och {currentYear}.");
+                }
+
+                yearModel = value;
+            }
+        }
+
 
 
         // Klassens  eventuella övriga metoder brukar finnas här, här en override av ToString()
@@ -86,7 +134,7 @@
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
         {
-            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model;
+            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model + "\t" + this.yearModel;
         }
     }
 }
