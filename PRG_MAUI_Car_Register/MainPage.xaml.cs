@@ -48,8 +48,9 @@ namespace PRG_MAUI_Car_Register
 
                 vehicleList.Add(vehicle);
 
-                listViewVehicles.ItemsSource = null;
                 listViewVehicles.ItemsSource = vehicleList;
+
+
 
                 entryRegistrationNumber.Text = string.Empty;
                 entryManufacturer.Text = string.Empty;
@@ -74,7 +75,7 @@ namespace PRG_MAUI_Car_Register
                         ? vehicleList.Where(v => v is Truck)
                         : vehicleList;
 
-            listViewVehicles.ItemsSource = filtered.ToList();
+            listViewVehicles.ItemsSource = vehicleList;
         }
 
         private void OnSearchClicked(object sender, EventArgs e)
