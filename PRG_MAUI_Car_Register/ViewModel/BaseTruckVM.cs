@@ -3,19 +3,18 @@
 
 namespace PRG_MAUI_Car_Register.ViewModels
 {
-    public abstract class CarViewModel : VehicleViewModel
+    public abstract class BaseTruckVM : BaseVehicleVM
     {
-        private int seats { get; set; }
+        private double loadCapacity { get; set; }
 
-
-        public int Seats
+        public double LoadCapacity
         {
-            get => Seats;
+            get => LoadCapacity;
             set
             {
-                if (seats != value)
+                if (loadCapacity != value)
                 {
-                    seats = value;
+                    loadCapacity = value;
                     OnPropertyChanged();
                 }
             }
@@ -23,7 +22,7 @@ namespace PRG_MAUI_Car_Register.ViewModels
 
         protected Vehicle CreateVehicle()
         {
-            var car = new Car
+            var truck = new Truck
             {
                 RegistrationNumber = RegistrationNumber,
                 Manufacturer = Manufacturer,
@@ -31,15 +30,14 @@ namespace PRG_MAUI_Car_Register.ViewModels
                 YearModel = YearModel,
             };
 
-            car.Seats = Seats;
+            truck.LoadCapacity = LoadCapacity;
 
-
-            return car;
+            return truck;
         }
 
         public override string ToString()
         {
-            return $"Bil - {Manufacturer} {Model} ({YearModel}) - {Seats} antal säten";
+            return $"Lastbil - {Manufacturer} {Model} ({YearModel}) - {LoadCapacity} ton lastkapacitet";
         }
     }
 }

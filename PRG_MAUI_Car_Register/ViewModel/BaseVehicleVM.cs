@@ -5,7 +5,7 @@ using PRG_MAUI_Car_Register.Models;
 
 namespace PRG_MAUI_Car_Register.ViewModels
 {
-    public class VehicleViewModel : BindableObject
+    public class BaseVehicleVM : BindableObject
     {
         // Properties som View binder till
         private string registrationNumber;
@@ -64,7 +64,7 @@ namespace PRG_MAUI_Car_Register.ViewModels
         public ICommand RegisterCommand { get; }
         public ICommand SearchCommand { get; }
 
-        public VehicleViewModel()
+        public BaseVehicleVM()
         {
             RegisterCommand = new Command(RegisterVehicle);
             SearchCommand = new Command(SearchVehicle);

@@ -3,7 +3,7 @@
 
 namespace PRG_MAUI_Car_Register.ViewModels
 {
-        public class MotorcycleViewModel : VehicleViewModel
+        public class BaseMotorCycleVM : BaseVehicleVM
         {
             private int seats { get; set; }
 

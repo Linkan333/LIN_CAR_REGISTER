@@ -5,7 +5,7 @@
              x:Class="PRG_MAUI_Car_Register.MainPage">
 
     <ContentPage.BindingContext>
-        <vm:VehicleViewModel />
+        <vm:BaseVehicleVM />
     </ContentPage.BindingContext>
 
     <ScrollView>

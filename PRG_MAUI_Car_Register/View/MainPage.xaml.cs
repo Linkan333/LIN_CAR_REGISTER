@@ -8,7 +8,7 @@ namespace PRG_MAUI_Car_Register
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new VehicleViewModel();
+            BindingContext = new BaseVehicleVM();
         }
     }
 }
