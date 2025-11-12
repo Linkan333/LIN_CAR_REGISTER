@@ -1,66 +1,27 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using PRG_MAUI_Car_Register.Models;
 
 namespace PRG_MAUI_Car_Register.ViewModels
 {
-    public class BaseVehicleVM : BindableObject
+    public class BaseVehicleVM : INotifyPropertyChanged
     {
-        // Properties som View binder till
-        private string registrationNumber;
-        private string manufacturer;
-        private string model;
-        private string yearModel;
-        private string selectedType;
-        private string searchText;
-        private string searchResult;
+        public string RegistrationNumber { get; set; }
+        public string Manufacturer { get; set; }
+        public string Model { get; set; }
+        public string YearModel { get; set; }
 
-        public ObservableCollection<Vehicle> Vehicles { get; set; } = new();
+        public int Seats { get; set; } // Bil / MC
+        public int LoadCapacity { get; set; } // Lastbil
 
-        public string RegistrationNumber
-        {
-            get => registrationNumber;
-            set { registrationNumber = value; OnPropertyChanged(); }
-        }
+        public string SelectedType { get; set; }
+        public string SearchText { get; set; }
+        public string SearchResult { get; set; }
 
-        public string Manufacturer
-        {
-            get => manufacturer;
-            set { manufacturer = value; OnPropertyChanged(); }
-        }
+        public ObservableCollection<Vehicle> Vehicles { get; } = new();
 
-        public string Model
-        {
-            get => model;
-            set { model = value; OnPropertyChanged(); }
-        }
-
-        public string YearModel
-        {
-            get => yearModel;
-            set { yearModel = value; OnPropertyChanged(); }
-        }
-
-        public string SelectedType
-        {
-            get => selectedType;
-            set { selectedType = value; OnPropertyChanged(); }
-        }
-
-        public string SearchText
-        {
-            get => searchText;
-            set { searchText = value; OnPropertyChanged(); }
-        }
-
-        public string SearchResult
-        {
-            get => searchResult;
-            set { searchResult = value; OnPropertyChanged(); }
-        }
-
-        // Commands som View anropar via XAML
         public ICommand RegisterCommand { get; }
         public ICommand SearchCommand { get; }
 
@@ -82,21 +43,50 @@ namespace PRG_MAUI_Car_Register.ViewModels
 
                 Vehicle vehicle = SelectedType switch
                 {
-                    "Bil" => new Car(),
-                    "MC" => new Motorcycle(),
-                    "Lastbil" => new Truck(),
-                    _ => throw new ArgumentException("Ogiltig fordonstyp")
+                    "Bil" => new Car
+                    {
+                        RegistrationNumber = RegistrationNumber,
+                        Manufacturer = Manufacturer,
+                        Model = Model,
+                        YearModel = YearModel,
+                        Seats = Seats
+                    },
+                    "MC" => new Motorcycle
+                    {
+                        RegistrationNumber = RegistrationNumber,
+                        Manufacturer = Manufacturer,
+                        Model = Model,
+                        YearModel = YearModel,
+                        Seats = Seats
+                    },
+                    "Lastbil" => new Truck
+                    {
+                        RegistrationNumber = RegistrationNumber,
+                        Manufacturer = Manufacturer,
+                        Model = Model,
+                        YearModel = YearModel,
+                        LoadCapacity = LoadCapacity
+                    },
+                    _ => null
                 };
 
-                vehicle.RegistrationNumber = RegistrationNumber;
-                vehicle.Manufacturer = Manufacturer;
-                vehicle.Model = Model;
-                vehicle.YearModel = YearModel;
+                if (vehicle != null)
+                {
+                    Vehicles.Add(vehicle);
 
-                Vehicles.Add(vehicle);
-
-                // Nollställ fälten
-                RegistrationNumber = Manufacturer = Model = YearModel = string.Empty;
+                    // nollställ fälten
+                    RegistrationNumber = Manufacturer = Model = YearModel = string.Empty;
+                    Seats = 0;
+                    LoadCapacity = 0;
+                    SelectedType = null;
+                    OnPropertyChanged(nameof(RegistrationNumber));
+                    OnPropertyChanged(nameof(Manufacturer));
+                    OnPropertyChanged(nameof(Model));
+                    OnPropertyChanged(nameof(YearModel));
+                    OnPropertyChanged(nameof(Seats));
+                    OnPropertyChanged(nameof(LoadCapacity));
+                    OnPropertyChanged(nameof(SelectedType));
+                }
             }
             catch (Exception ex)
             {
@@ -109,30 +99,19 @@ namespace PRG_MAUI_Car_Register.ViewModels
             if (string.IsNullOrWhiteSpace(SearchText))
             {
                 SearchResult = "Ange ett registreringsnummer för att söka.";
-                return;
-            }
-
-            var found = Vehicles.FirstOrDefault(v => v.RegistrationNumber?.ToLower() == SearchText.ToLower());
-            if (found != null)
-            {
-                string typeName = found switch
-                {
-                    Car => "Bil",
-                    Motorcycle => "MC",
-                    Truck => "Lastbil",
-                    _ => "Okänd typ"
-                };
-
-                SearchResult = $"Fordon hittat:\n" +
-                               $"Registreringsnummer: {found.RegistrationNumber}\n" +
-                               $"Tillverkare: {found.Manufacturer}\n" +
-                               $"Modell: {found.Model}\n" +
-                               $"Typ: {typeName}";
             }
             else
             {
-                SearchResult = "Inget fordon hittades med det registreringsnumret.";
+                var found = Vehicles.FirstOrDefault(v => v.RegistrationNumber?.ToLower() == SearchText.ToLower());
+                SearchResult = found != null ? found.GetDescription() : "Inget fordon hittades med det registreringsnumret.";
             }
+            OnPropertyChanged(nameof(SearchResult));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
