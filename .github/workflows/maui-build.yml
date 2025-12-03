@@ -1,0 +1,42 @@
+name: MAUI Build
+
+on:
+  push:
+    branches: [ "Architecture" ]
+  pull_request:
+    branches: [ "Architecture" ]
+
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install MAUI workloads
+      run: |
+        dotnet workload install maui
+        dotnet workload install android
+        dotnet workload install ios
+        dotnet workload install maccatalyst
+        dotnet workload install windows
+
+    - name: Restore solution
+      run: dotnet restore PRG_MAUI_Car_Register.sln
+
+    - name: Build (Release)
+      run: dotnet build PRG_MAUI_Car_Register.sln -c Release --no-restore
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: maui-build-output
+        path: |
+          PRG_MAUI_Car_Register/bin/Release/
