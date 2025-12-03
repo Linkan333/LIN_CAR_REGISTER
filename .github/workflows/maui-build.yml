@@ -26,7 +26,6 @@ jobs:
         dotnet workload install android
         dotnet workload install ios
         dotnet workload install maccatalyst
-        dotnet workload install windows
 
     - name: Restore solution
       run: dotnet restore PRG_MAUI_Car_Register.sln
